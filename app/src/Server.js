@@ -34,9 +34,10 @@ dependencies: {
  * @link    GitHub: https://github.com/miroslavpejic85/mirotalksfu
  * @link    Live demo: https://sfu.mirotalk.com
  * @license For open source use: AGPLv3
- * @license For commercial or closed source, contact us at info.mirotalk@gmail.com
+ * @license For commercial or closed source, contact us at license.mirotalk@gmail.com or buy directly via CodeCanyon
+ * @license CodeCanyon: https://codecanyon.net/item/mirotalk-sfu-webrtc-realtime-video-conferences/40769970
  * @author  Miroslav Pejic - miroslav.pejic.85@gmail.com
- * @version 1.0.0
+ * @version 1.0.1
  *
  */
 
@@ -448,16 +449,18 @@ function startServer() {
     })();
 
     async function createWorkers() {
-        let { numWorkers } = config.mediasoup;
+        const { numWorkers } = config.mediasoup;
+
+        const { logLevel, logTags, rtcMinPort, rtcMaxPort } = config.mediasoup.worker;
 
         log.debug('WORKERS:', numWorkers);
 
         for (let i = 0; i < numWorkers; i++) {
             let worker = await mediasoup.createWorker({
-                logLevel: config.mediasoup.worker.logLevel,
-                logTags: config.mediasoup.worker.logTags,
-                rtcMinPort: config.mediasoup.worker.rtcMinPort,
-                rtcMaxPort: config.mediasoup.worker.rtcMaxPort,
+                logLevel: logLevel,
+                logTags: logTags,
+                rtcMinPort: rtcMinPort,
+                rtcMaxPort: rtcMaxPort,
             });
             worker.on('died', () => {
                 log.error('Mediasoup worker died, exiting in 2 seconds... [pid:%d]', worker.pid);
